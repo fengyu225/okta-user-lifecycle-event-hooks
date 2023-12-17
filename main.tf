@@ -72,7 +72,7 @@ resource "aws_security_group_rule" "okta_event_hooks_ingress_all" {
   from_port   = 0
   to_port     = 0
   protocol    = "-1"
-  cidr_blocks = ["0.0.0.0/0"]
+  cidr_blocks = local.okta_ips
 
   security_group_id = aws_security_group.okta_event_hooks_alb.id
 }
@@ -133,7 +133,7 @@ resource "aws_alb" "okta_event_hooks" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.okta_event_hooks_alb.id]
   subnets            = [aws_subnet.public_subnet_us_east_1a.id, aws_subnet.public_subnet_us_east_1b.id]
-  tags               = {
+  tags = {
     Name = "okta-event-hooks-alb"
   }
 }
@@ -143,7 +143,7 @@ resource "aws_alb_target_group" "okta_event_hooks" {
   port     = 8080
   protocol = "HTTP"
   vpc_id   = aws_vpc.main.id
-  tags     = {
+  tags = {
     Name = "okta-event-hooks-tg"
   }
   health_check {
@@ -195,13 +195,13 @@ resource "aws_iam_policy" "ecr_policy" {
   description = "Policy for allowing access to ECR"
 
   policy = jsonencode({
-    Version   = "2012-10-17",
+    Version = "2012-10-17",
     Statement = [
       {
         Sid      = "ecrAuthZ"
         Effect   = "Allow"
         Resource = "*"
-        Action   = [
+        Action = [
           "ecr:GetAuthorizationToken",
         ]
       },
@@ -209,7 +209,7 @@ resource "aws_iam_policy" "ecr_policy" {
         Sid      = "ecr"
         Effect   = "Allow"
         Resource = "arn:aws:ecr:us-east-1:072422391281:repository/okta-event-hooks"
-        Action   = [
+        Action = [
           "ecr:BatchCheckLayerAvailability",
           "ecr:GetDownloadUrlForLayer",
           "ecr:GetRepositoryPolicy",

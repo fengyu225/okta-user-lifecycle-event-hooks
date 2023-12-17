@@ -1,0 +1,106 @@
+{
+  "eventType": "com.okta.event_hook",
+  "eventTypeVersion": "1.0",
+  "cloudEventsVersion": "0.1",
+  "source": "https://dev-15495745.okta.com/api/v1/eventHooks/whodz0cpxciQXaJrR5d7",
+  "eventId": "b35b987b-28d0-4660-b8d4-049c7ed9fc47",
+  "data": {
+    "events": [
+      {
+        "uuid": "881314fe-9d15-11ee-bc5e-4375ba0eba6a",
+        "published": "2023-12-17T19:50:29.789Z",
+        "eventType": "group.user_membership.add",
+        "version": "0",
+        "displayMessage": "Add user to group membership",
+        "severity": "INFO",
+        "client": {
+          "userAgent": {
+            "rawUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "os": "Mac OS X",
+            "browser": "CHROME"
+          },
+          "zone": "null",
+          "device": "Computer",
+          "ipAddress": "23.118.51.157",
+          "geographicalContext": {
+            "city": "San Jose",
+            "state": "California",
+            "country": "United States",
+            "postalCode": "95118",
+            "geolocation": {
+              "lat": 37.2566,
+              "lon": -121.8889
+            }
+          },
+          "ipChain": [
+            {
+              "ip": "23.118.51.157",
+              "geographicalContext": {
+                "city": "San Jose",
+                "state": "California",
+                "country": "United States",
+                "postalCode": "95118",
+                "geolocation": {
+                  "lat": 37.2566,
+                  "lon": -121.8889
+                }
+              },
+              "version": "V4"
+            }
+          ]
+        },
+        "actor": {
+          "id": "00uanj6crnJlouOZz5d7",
+          "type": "User",
+          "alternateId": "fengyu225@gmail.com",
+          "displayName": "Yu Feng"
+        },
+        "outcome": {
+          "result": "SUCCESS"
+        },
+        "target": [
+          {
+            "id": "00uanplv6slY8dR1h5d7",
+            "type": "User",
+            "alternateId": "Jdoe@example.com",
+            "displayName": "John Doe"
+          },
+          {
+            "id": "00gdz0dyasA3d63V85d7",
+            "type": "UserGroup",
+            "alternateId": "unknown",
+            "displayName": "test-okta-hook-1"
+          }
+        ],
+        "transaction": {
+          "type": "WEB",
+          "id": "25b9ce9fef056555c9d6d03c81b37e26",
+          "detail": {}
+        },
+        "debugContext": {
+          "debugData": {
+            "requestId": "25b9ce9fef056555c9d6d03c81b37e26",
+            "dtHash": "9fb9091782b67be994d36323aecd4018b17149dcf2fd00fcb92ce3209b40f99a",
+            "requestUri": "/api/v1/groups/00gdz0dyasA3d63V85d7/users/00uanplv6slY8dR1h5d7",
+            "targetEventHookIds": "whodz0cpxciQXaJrR5d7",
+            "url": "/api/v1/groups/00gdz0dyasA3d63V85d7/users/00uanplv6slY8dR1h5d7?"
+          }
+        },
+        "legacyEventType": "core.user_group_member.user_add",
+        "authenticationContext": {
+          "authenticationStep": 0,
+          "externalSessionId": "102Agkz8rIERniKQ4Mq0kHJjA"
+        },
+        "securityContext": {
+          "asNumber": 7018,
+          "asOrg": "at&t corp.",
+          "isp": "att services inc",
+          "domain": "sbcglobal.net",
+          "isProxy": false
+        }
+      }
+    ]
+  },
+  "eventTime": "2023-12-17T19:50:37.215Z",
+  "contentType": "application/json"
+}

@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -12,20 +15,8 @@ type VerificationResponse struct {
 	Verification string `json:"verification"`
 }
 
-// EventData represents the structure of the event data received in POST request
-type EventData struct {
-	Data struct {
-		Events []struct {
-			Target []struct {
-				AlternateId string `json:"alternateId"`
-			} `json:"target"`
-			EventType string `json:"eventType"`
-		} `json:"events"`
-	} `json:"data"`
-}
-
 func main() {
-	http.HandleFunc("/user-lifecycle", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
 			handleGetRequest(w, r)
@@ -70,16 +61,44 @@ func handlePostRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var eventData EventData
-	err := json.NewDecoder(r.Body).Decode(&eventData)
+	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
+		http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		return
+	}
+
+	// Log the raw request body for debugging
+	log.Println("Raw request body:", string(bodyBytes))
+
+	// Re-create the request body for JSON decoding
+	r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+
+	var eventData EventData
+	err = json.NewDecoder(r.Body).Decode(&eventData)
+	if err != nil {
+		log.Println("Error decoding JSON body:", err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	user := eventData.Data.Events[0].Target[0].AlternateId
-	eventType := eventData.Data.Events[0].EventType
-	log.Printf("Lifecycle event %s for user %s", eventType, user)
-
+	for _, event := range eventData.Data.Events {
+		eventType := event.EventType
+		switch eventType {
+		case GroupLifecycleCreate:
+			GroupLifecycleCreateHandler(event)
+		case GroupMembershipAdd:
+			GroupMembershipAddHandler(event)
+		case GroupMembershipRemove:
+			GroupMembershipRemoveHandler(event)
+		case GroupProfileUpdate:
+			GroupProfileUpdateHandler(event)
+		case GroupApplicationAssignmentAdd:
+			GroupApplicationAssignmentAddHandler(event)
+		case GroupApplicationAssignmentRemove:
+			GroupApplicationAssignmentRemoveHandler(event)
+		default:
+			log.Println("Unknown event type received.")
+		}
+	}
 	w.WriteHeader(http.StatusOK)
 }
